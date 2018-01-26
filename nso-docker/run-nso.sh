@@ -18,7 +18,7 @@ if [ "$1" == '' ]; then
     # This will kill then tail -f below, and then invoke ncs --stop
     trap 'kill ${!}; term_handler' SIGTERM
 
-    ncs --foreground -v
+    ncs --foreground -v &
 
     # wait forever
     while true
