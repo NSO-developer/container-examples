@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: nso-lsa-upper
+  labels:
+    app: nso-lsa-upper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nso-lsa-upper
+  template:
+    metadata:
+      labels:
+        app: nso-lsa-upper
+    spec:
+      containers:
+        - name: nso-lsa-upper
+          image: containers.cisco.com/frjansso/nso-lsa:1.0
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              memory: 1Gi
+          env:
+            - name: NCS_JAVA_VM_OPTIONS 
+              value: -Xms1G
+            - name: NCS_IPC_PORT 
+              value: "4569"
+          volumeMounts:
+            - mountPath: /root/nso-project
+              name: upper-nso
+          readinessProbe:
+            tcpSocket:
+              port: 2024
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 2024
+            initialDelaySeconds: 30
+            periodSeconds: 20
+      volumes:
+        - name: upper-nso
+          hostPath:
+            path: /home/frjansso/nso-container-examples/kube-lsa/nso-projects/22-layered-service-architecture/upper-nso
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nso-lsa-upper
+spec:
+  selector: 
+    app: nso-lsa-upper
+  ports:
+    - protocol: TCP
+      name: ssh
+      port: 2024
+      targetPort: 2024

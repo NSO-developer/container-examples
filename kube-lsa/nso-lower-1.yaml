@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: nso-lsa-lower-1
+  labels:
+    app: nso-lsa-lower-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nso-lsa-lower-1
+  template:
+    metadata:
+      labels:
+        app: nso-lsa-lower-1
+    spec:
+      containers:
+        - name: nso-lsa-lower-1
+          image: containers.cisco.com/frjansso/nso-lsa:1.0
+          resources:
+            limits:
+              memory: 2Gi
+            requests:
+              memory: 1Gi
+          env:
+            - name: NCS_JAVA_VM_OPTIONS 
+              value: -Xms1G
+            - name: NCS_IPC_PORT
+              value: "4570"
+          volumeMounts:
+            - mountPath: /root/nso-project
+              name: lower-1
+          readinessProbe:
+            tcpSocket:
+              port: 2023
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 2023
+            initialDelaySeconds: 30
+            periodSeconds: 20
+      volumes:
+        - name: lower-1
+          hostPath:
+            path: /home/frjansso/nso-container-examples/kube-lsa/nso-projects/22-layered-service-architecture/lower-nso-1
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nso-lsa-lower-1
+spec:
+  selector: 
+    app: nso-lsa-lower-1
+  ports:
+    - protocol: TCP
+      name: netconf
+      port: 2023
+      targetPort: 2023

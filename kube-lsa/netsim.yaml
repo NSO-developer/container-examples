@@ -1,0 +1,79 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: nso-lsa-netsim
+  labels:
+    app: nso-lsa-netsim
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nso-lsa-netsim
+  template:
+    metadata:
+      labels:
+        app: nso-lsa-netsim
+    spec:
+      containers:
+        - name: nso-lsa-netsim
+          image: containers.cisco.com/frjansso/nso-lsa-netsim:1.0
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              memory: 256Mi
+          env:
+            - name: NCS_JAVA_VM_OPTIONS 
+              value: -Xms1G
+          volumeMounts:
+            - mountPath: /root/nso-project/netsim
+              name: nso-netsim
+          readinessProbe:
+            tcpSocket:
+              port: 12022
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 12022
+            initialDelaySeconds: 30
+            periodSeconds: 20
+      volumes:
+        - name: nso-netsim
+          hostPath:
+            path: /home/frjansso/nso-container-examples/kube-lsa/nso-projects/22-layered-service-architecture/netsim
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nso-lsa-netsim
+spec:
+  selector: 
+    app: nso-lsa-netsim
+  ports:
+    - protocol: TCP
+      name: ex0
+      port: 12022
+      targetPort: 12022
+    - protocol: TCP
+      name: ex1
+      port: 12023
+      targetPort: 12023
+    - protocol: TCP
+      name: ex2
+      port: 12024
+      targetPort: 12024
+    - protocol: TCP
+      name: ex3
+      port: 12025
+      targetPort: 12025
+    - protocol: TCP
+      name: ex4
+      port: 12026
+      targetPort: 12026
+    - protocol: TCP
+      name: ex5
+      port: 12027 
+      targetPort: 12027
