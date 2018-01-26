@@ -13,6 +13,8 @@ publish the Dockerfile and script.
 
 ## Running
 To successfully build, you'll need to source NSO 4.5 ncsrc.
+
+You will also have to update the volume paths in \*.yaml.
 ```
 # make all start
 ...
