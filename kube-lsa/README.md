@@ -54,11 +54,7 @@ Entering configuration mode private
 [ok][2017-12-19 20:48:11]
 
 [edit]
-admin@upper-nso% set cfs-vlan test a-router ex0 z-router ex4
-Possible completions:
-  iface  unit  vid
-admin@upper-nso% set cfs-vlan test a-router ex0 z-router ex4 iface eth0 unit 1
-vid 2
+admin@upper-nso% set cfs-vlan test a-router ex0 z-router ex4 iface eth0 unit 1 vid 2
 [ok][2017-12-19 20:48:29]
 
 [edit]
