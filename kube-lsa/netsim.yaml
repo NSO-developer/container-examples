@@ -42,7 +42,7 @@ spec:
       volumes:
         - name: nso-netsim
           hostPath:
-            path: /home/frjansso/nso-container-examples/kube-lsa/nso-projects/22-layered-service-architecture/netsim
+            path: $PWD/nso-projects/22-layered-service-architecture/netsim
             type: Directory
 ---
 apiVersion: v1

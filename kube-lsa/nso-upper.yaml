@@ -43,7 +43,7 @@ spec:
       volumes:
         - name: upper-nso
           hostPath:
-            path: /home/frjansso/nso-container-examples/kube-lsa/nso-projects/22-layered-service-architecture/upper-nso
+            path: $PWD/nso-projects/22-layered-service-architecture/upper-nso
             type: Directory
 ---
 apiVersion: v1

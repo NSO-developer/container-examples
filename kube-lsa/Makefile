@@ -19,7 +19,7 @@ clean:
 YAML=nso-upper.yaml nso-lower-1.yaml nso-lower-2.yaml netsim.yaml
 
 start:
-	$(foreach desc, $(YAML), kubectl create -f $(desc);)
+	$(foreach desc, $(YAML), envsubst < $(desc) | kubectl create -f -;)
 
 stop:
 	$(foreach desc, $(YAML), kubectl delete -f $(desc);)

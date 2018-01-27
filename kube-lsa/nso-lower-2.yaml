@@ -43,7 +43,7 @@ spec:
       volumes:
         - name: lower-2
           hostPath:
-            path: /home/frjansso/nso-container-examples/kube-lsa/nso-projects/22-layered-service-architecture/lower-nso-2
+            path: $PWD/nso-projects/22-layered-service-architecture/lower-nso-2
             type: Directory
 ---
 apiVersion: v1
