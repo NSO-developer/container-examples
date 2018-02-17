@@ -4,6 +4,8 @@ This document aims to give some insight and ideas around running NSO in a Docker
 
 NSO is inherently a stateful application with a built-in database, so special attention has to be paid to have relevant parts of the container persisted.
 
+**Thanks** Bruce Martins and Chris Holmes for input.
+
 **NOTE** If you have feedback on this document, please contact me.
 
 ## NSO Structure
