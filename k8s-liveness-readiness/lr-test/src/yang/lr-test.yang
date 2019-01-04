@@ -45,5 +45,9 @@ module lr-test {
 	  action set-dead {
       tailf:actionpoint lr-test-set-dead;
     }
+
+    leaf last-live-check {
+      type string;
+    }
   }
 }

@@ -1,6 +1,6 @@
 CONTAINER=containers.cisco.com/frjansso/nso-live-ready-test
 
-.PHONY=image push run
+.PHONY=image push run deploy undeploy
 
 lr-test/load-dir/lr-test.fxs: lr-test/src/yang/lr-test.yang
 	cd lr-test/src; make
@@ -14,9 +14,14 @@ push:
 clean:
 	docker rmi $(CONTAINER)
 
-config-map:
-	kubectl delete configmap nso-live-ready-test || true
+deploy: 
 	kubectl create configmap nso-live-ready-test --from-file=ncs.conf
+	kubectl create -f deployment.yml
+
+undeploy:
+	kubectl delete -f deployment.yml
+	kubectl delete configmap nso-live-ready-test || true
+
 run:
 	docker run --rm --name nso-lr\
 		--mount type=bind,source="$(CURDIR)",target=/app \

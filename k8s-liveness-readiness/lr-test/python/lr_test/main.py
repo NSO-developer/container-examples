@@ -3,8 +3,11 @@ import datetime
 
 import ncs
 from ncs.dp import Action
+import ncs.maapi as maapi
+import ncs.maagic as maagic
 
 ready = False
+
 
 class Ready(Action):
     @Action.action
@@ -31,7 +34,15 @@ class Alive(Action):
         global alive
         if not alive:
             raise Exception("I'm dead!")
-        output.result = str(datetime.datetime.now())
+        now = str(datetime.datetime.now())
+
+        # Make sure we can open a write trans and write something to CDB
+        with maapi.single_write_trans(uinfo.username, "alive") as th:
+            k8s = maagic.get_node(th, "/lr-test:k8s")
+            k8s.last_live_check = now
+            th.apply()
+
+        output.result = now
 
 
 class SetDead(Action):
