@@ -1,0 +1,49 @@
+module lr-test {
+
+  namespace "http://example.com/lr-test";
+  prefix lr-test;
+  yang-version 1.1;
+
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  container k8s {
+    action ready {
+      tailf:actionpoint lr-test-ready;
+      output {
+        leaf result {
+          type string;
+        }
+      }
+    }
+
+	  action set-ready {
+      tailf:actionpoint lr-test-set-ready;
+    }
+
+    action alive {
+      tailf:actionpoint lr-test-alive;
+      output {
+        leaf result {
+          type string;
+        }
+      }
+    }
+
+	  action set-dead {
+      tailf:actionpoint lr-test-set-dead;
+    }
+  }
+}

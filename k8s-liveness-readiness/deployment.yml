@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nso-deployment
+  labels:
+    app: nso
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nso
+  template:
+    metadata:
+      labels:
+        app: nso
+    spec:
+      containers:
+      - name: nso-container
+        image: containers.cisco.com/frjansso/nso-live-ready-test
+        volumeMounts:
+          - mountPath: /etc/ncs
+            name: config
+        ports:
+          - containerPort: 8080
+        livenessProbe:
+          exec:
+            command:
+              - /is-alive.sh
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+              - /is-ready.sh
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      imagePullSecrets:
+      - name: dockerdev-pull-secret
+      volumes:
+        - name: config
+          configMap:
+            name: nso-live-ready-test
+            items: 
+            - key: ncs.conf
+              path: ncs.conf
