@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM bitnami/minideb
 
 ARG NSOVER
 
@@ -30,15 +30,15 @@ RUN apt-get update; \
     rm -rf /opt/ncs/current/lib/pyang; \
     rm -rf /opt/ncs/current/erlang
 
-FROM ubuntu:18.04
+FROM bitnami/minideb
 
-RUN apt-get update; \
-    apt-get install -y openssh-client default-jre-headless python; \
+RUN install_packages openssh-client default-jre-headless python; \
     echo '. /opt/ncs/current/ncsrc' >> /root/.bashrc; \
-    apt-get -y clean autoclean; \
-    apt-get -y autoremove; \
     rm -rf /tmp/* /var/tmp/* /var/lib/{apt,dpkg,cache,log}/; \
-    mkdir /var/log/ncs;
+    mkdir /var/log/ncs; \
+    groupadd ncsadmin; \
+    useradd admin -g ncsadmin; \
+    echo "admin:admin" | chpasswd
 
 COPY --from=0 /etc/ncs /etc/ncs/
 COPY --from=0 /var/opt/ncs /var/opt/ncs/
@@ -46,8 +46,8 @@ COPY --from=0 /opt/ncs /opt/ncs/
 COPY --from=0 /etc/init.d/ncs /etc/init.d/.
 
 COPY run-nso.sh /
-COPY admin.xml /var/opt/ncs/cdb/
+COPY java.xml /var/opt/ncs/cdb/
 
-EXPOSE 8080 830 2022 2023 4569
+EXPOSE 80 830 2022 2023 4569
 
 CMD ["/run-nso.sh"]

@@ -1,0 +1,10 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <java-vm xmlns="http://tail-f.com/ns/ncs"
+    xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <stdout-capture>
+      <enabled>true</enabled>
+      <file nc:operation="delete"/>
+    </stdout-capture>
+    <jmx nc:operation="delete"/>
+  </java-vm>
+</config>
