@@ -28,7 +28,10 @@ RUN apt-get update; \
     rm -rf /opt/ncs/current/lib/ncs/lib/confdc; \
     rm -rf /opt/ncs/current/lib/ncs-project; \
     rm -rf /opt/ncs/current/lib/pyang; \
-    rm -rf /opt/ncs/current/erlang
+    rm -rf /opt/ncs/current/erlang \
+    rm -rf /opt/ncs/current/netsim/confd/src/confd/pyapi/doc \
+    rm -rf /opt/ncs/current/netsim/confd/erlang/econfd/doc \
+    rm -rf /opt/ncs/current/src/ncs/pyapi/doc
 
 FROM bitnami/minideb
 
@@ -38,7 +41,8 @@ RUN install_packages openssh-client default-jre-headless python; \
     mkdir /var/log/ncs; \
     groupadd ncsadmin; \
     useradd admin -g ncsadmin; \
-    echo "admin:admin" | chpasswd
+    echo "admin:admin" | chpasswd; \
+    rm -rf /usr/share/doc
 
 COPY --from=0 /etc/ncs /etc/ncs/
 COPY --from=0 /var/opt/ncs /var/opt/ncs/
@@ -47,6 +51,7 @@ COPY --from=0 /etc/init.d/ncs /etc/init.d/.
 
 COPY run-nso.sh /
 COPY java.xml /var/opt/ncs/cdb/
+COPY admin.xml /var/opt/ncs/cdb/
 
 EXPOSE 80 830 2022 2023 4569
 

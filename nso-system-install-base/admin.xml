@@ -1,0 +1,10 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+	<nacm xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-acm">
+		<groups>
+			<group>
+				<name>ncsadmin</name>
+				<user-name>admin</user-name>
+			</group>
+		</groups>
+	</nacm>
+</config>
