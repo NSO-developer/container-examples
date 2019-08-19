@@ -5,7 +5,7 @@ ARG NSOVER
 COPY nso-$NSOVER.linux.x86_64.installer.bin /tmp/nso
 RUN apt-get update; \
     apt-get install -y openssh-client; \
-    /tmp/nso --system-install; \
+    sh /tmp/nso --system-install; \
     rm -rf /opt/ncs/current/var/ncs/webui; \
     rm -rf /opt/ncs/current/doc; \
     rm -rf /opt/ncs/current/man; \
@@ -35,13 +35,16 @@ RUN apt-get update; \
 
 FROM bitnami/minideb
 
+# The hashed pwd was generated on a Linux (doesn't seem to work on Mac OS)
+# python3 -c 'import crypt; print(crypt.crypt("cisco123", crypt.mksalt(crypt.METHOD_SHA512)))'
+
 RUN install_packages openssh-client default-jre-headless python; \
     echo '. /opt/ncs/current/ncsrc' >> /root/.bashrc; \
     rm -rf /tmp/* /var/tmp/* /var/lib/{apt,dpkg,cache,log}/; \
     mkdir /var/log/ncs; \
     groupadd ncsadmin; \
     useradd admin -g ncsadmin; \
-    echo "admin:admin" | chpasswd; \
+    echo 'admin:$6$xCnzTvhGBo5JwBnF$A7eeqpeUDeDzBLF0/..3QqGqtEaFYbDK2xsHrrQHm4RkQkX5W/AiCwwMx2osocS7qTv2a35zKTE3kS3oSKE2G.' | chpasswd -e; \
     rm -rf /usr/share/doc
 
 COPY --from=0 /etc/ncs /etc/ncs/

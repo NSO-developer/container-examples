@@ -1,6 +1,6 @@
 
 CONTAINER="containers.cisco.com/frjansso/nso-system-base"
-VER=4.7.2.1
+VER=5.2.0.2
 
 .PHONY=image push run-bash run
 
