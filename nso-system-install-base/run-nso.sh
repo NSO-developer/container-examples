@@ -24,21 +24,23 @@ setup_ncs_environment () {
     export NCS_CONFIG_DIR NCS_RUN_DIR NCS_LOG_DIR
 }
 
+nso_pid=0
+
 # SIGTERM-handler
 term_handler() {
-    ncs --stop
-    # exit 143; # 128 + 15 -- SIGTERM
-    exit 0; # 128 + 15 -- SIGTERM
-}
+    if [ $nso_pid -ne 0 ]; then
+        ncs --stop
+        wait "$nso_pid"
+    fi
 
-# source /root/nso/ncsrc
+    exit 143; # 128 + 15 -- SIGTERM
+}
 
 if [ "$1" == '' ]; then
     # This will kill then tail -f below, and then invoke ncs --stop
     trap 'kill ${!}; term_handler' SIGTERM
 
     setup_ncs_environment
-    # /etc/init.d/ncs start
 
     # Do we have a env var containing a password available?
     if [ "x$ADMIN_PWD" != "x" ]
@@ -48,8 +50,15 @@ if [ "$1" == '' ]; then
 
     echo "NCS_RUN_DIR: $NCS_RUN_DIR"
 
-    # wait forever
-    $ncs --cd ${rundir} ${conf} --foreground -v & wait ${!}
+    # start NSO in the background, but outputting logs to stdout
+    $ncs --cd ${rundir} ${conf} --foreground -v & 
+    nso_pid="$!"
+    
+    # Wait forever until we get SIGTERM.
+    while true
+    do
+        tail -f /dev/null & wait ${!}
+    done
 else
     exec "$@"
 fi
