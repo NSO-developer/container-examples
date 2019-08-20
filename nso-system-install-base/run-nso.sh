@@ -40,6 +40,12 @@ if [ "$1" == '' ]; then
     setup_ncs_environment
     # /etc/init.d/ncs start
 
+    # Do we have a env var containing a password available?
+    if [ "x$ADMIN_PWD" != "x" ]
+    then
+        echo "admin:$ADMIN_PWD" | chpasswd
+    fi
+
     echo "NCS_RUN_DIR: $NCS_RUN_DIR"
 
     # wait forever

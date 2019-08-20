@@ -1,3 +1,13 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nso-secret
+type: Opaque
+data:
+  # echo -n 'cisco' | base64
+  password: Y2lzY28K
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,3 +25,11 @@ spec:
       containers:
       - name: nso
         image: containers.cisco.com/frjansso/nso-system-base
+        imagePullPolicy: Always
+        # Pickup password from secret, please see run-nso.sh
+        env:
+          - name: ADMIN_PWD
+            valueFrom:
+              secretKeyRef:
+                name: nso-secret
+                key: password
