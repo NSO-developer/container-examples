@@ -6,6 +6,9 @@ COPY nso-$NSOVER.linux.x86_64.installer.bin /tmp/nso
 RUN apt-get update; \
     apt-get install -y openssh-client; \
     sh /tmp/nso --system-install; \
+    # Generate SSH key in PEM format
+    rm -f /etc/ncs/ssh/*; \
+    ssh-keygen -m PEM -t rsa -f /etc/ncs/ssh/ssh_host_rsa_key -N ''; \
     rm -rf /opt/ncs/current/var/ncs/webui; \
     rm -rf /opt/ncs/current/doc; \
     rm -rf /opt/ncs/current/man; \
