@@ -1,16 +1,16 @@
 
 CONTAINER="containers.cisco.com/frjansso/nso-system-base"
-VER=5.2.0.3
+# VER=5.2.0.3
 
 .PHONY=image push run-bash run
 
 image:
-	docker build --build-arg NSOVER=$(VER) -t $(CONTAINER):latest .
-	docker tag $(CONTAINER):latest $(CONTAINER):$(VER)
+	docker build --build-arg NSOVER=$(VER) -t $(CONTAINER):$(VER) .
+	# docker tag $(CONTAINER):latest $(CONTAINER):$(VER)
 
 push:
 	docker push $(CONTAINER):$(VER)
-	docker push $(CONTAINER):latest
+	# docker push $(CONTAINER):latest
 
 run-bash:
 	docker run -it --rm --name=nso-$(VER) $(CONTAINER):$(VER) bash
