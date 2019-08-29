@@ -13,4 +13,8 @@ As an alternative, run-nso.sh also checks for an environment variable called ADM
 
 This makes it possible to inject the password using Kubernetes secrets, see test-deployment.yaml.
 
+# Usage
+Please see the nso-build directory in this repository for an example Dockerfile that uses an NSO build image to build packages and then copy stripped versions of the packeages to an image based on this image.
+
 **TODO**: Make is possible to pass password hash through the environment.
+
