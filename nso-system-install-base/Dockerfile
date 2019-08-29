@@ -9,6 +9,7 @@ RUN apt-get update; \
     # Generate SSH key in PEM format
     rm -f /etc/ncs/ssh/*; \
     ssh-keygen -m PEM -t rsa -f /etc/ncs/ssh/ssh_host_rsa_key -N ''; \
+    # Remove stuff we don't need/want from the NSO installation
     rm -rf /opt/ncs/current/var/ncs/webui; \
     rm -rf /opt/ncs/current/doc; \
     rm -rf /opt/ncs/current/man; \
